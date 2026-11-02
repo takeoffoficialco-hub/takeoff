@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Las Estrellas Underwater</title>
+  <meta name="description" content="Una experiencia musical privada alrededor de una piscina bajo las estrellas. Primer evento en diciembre. Inscríbete y asegura tu lugar.">
+  <meta name="theme-color" content="#02060f">
+
+  <!-- Open Graph / Redes -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Las Estrellas Underwater · We create stars.">
+  <meta property="og:description" content="Una noche. Un universo. Una experiencia inolvidable. Inscríbete al primer evento de diciembre.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Tras desplegar, añade aquí tu URL real: <meta property="og:url" content="https://TU-DOMINIO"> y usa URL absoluta en og:image -->
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js')</script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip" href="#inscripcion">Ir al formulario</a>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="inicio">
+    <canvas id="stars" aria-hidden="true"></canvas>
+    <div class="moon" aria-hidden="true"></div>
+    <div class="water" aria-hidden="true">
+      <div class="water__glow"></div>
+      <div class="wave wave--1"></div>
+      <div class="wave wave--2"></div>
+      <div class="wave wave--3"></div>
+      <div class="caustics"></div>
+    </div>
+
+    <div class="hero__brand">
+      <img src="assets/takeoff-logo.png" alt="TAKEOFF" width="800" height="234" decoding="async">
+    </div>
+
+    <div class="hero__content">
+      <p class="eyebrow reveal">Pool party privada · Diciembre</p>
+      <h1 class="hero__title reveal">
+        <span>LAS ESTRELLAS</span>
+        <span class="shimmer">UNDERWATER</span>
+      </h1>
+      <p class="hero__slogan reveal">We create stars.</p>
+      <p class="hero__impact reveal">Una noche. Un universo. Una experiencia inolvidable.</p>
+      <p class="hero__text reveal">Música en vivo, luces bajo el agua y un cielo lleno de estrellas. Una pool party exclusiva donde el sonido y la piscina se vuelven una sola cosa.</p>
+      <a class="btn btn--primary reveal" href="#inscripcion" id="cta-hero">QUIERO INSCRIBIRME</a>
+    </div>
+
+    <a class="scroll-hint" href="#experiencia" aria-label="Bajar a la experiencia"><span></span></a>
+  </header>
+
+  <main>
+    <!-- ============ EXPERIENCIA ============ -->
+    <section class="section experience" id="experiencia">
+      <div class="container">
+        <h2 class="section__title reveal">La experiencia</h2>
+        <p class="section__lead reveal">Donde las estrellas, la música y el agua se encuentran.</p>
+
+        <ul class="cards">
+          <li class="card reveal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <h3>Música y artistas</h3>
+            <p>Sonidos en vivo y talento emergente en primera línea.</p>
+          </li>
+          <li class="card reveal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c2.5-3 5-3 7.5 0s5 3 7.500 0 2.500-2 4.500-1M2 18c2.500-3 5-3 7.500 0s5 3 7.500 0 2.500-2 4.500-1M2 6c2.500-3 5-3 7.500 0s5 3 7.500 0 2.500-2 4.500-1"/></svg>
+            <h3>Pool party nocturna</h3>
+            <p>Luces subacuáticas y reflejos bajo el cielo abierto.</p>
+          </li>
+          <li class="card reveal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.900 6.300 6.900.8-5.100 4.700 1.400 6.800L12 17l-6.100 3.600 1.400-6.800L2.200 9.100l6.900-.8z"/></svg>
+            <h3>Experiencia exclusiva</h3>
+            <p>Un evento privado, pensado al detalle y con acceso limitado.</p>
+          </li>
+          <li class="card reveal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.500"/><path d="M3 20c0-3.300 2.700-6 6-6s6 2.700 6 6M15 20c0-2.200 1.600-4 4-4 1.100 0 2 .4 2 .4"/></svg>
+            <h3>Una comunidad</h3>
+            <p>Personas que se conectan a través de la música.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ INSCRIPCIÓN ============ -->
+    <section class="section signup" id="inscripcion">
+      <div class="container container--narrow">
+        <h2 class="section__title reveal">Inscríbete</h2>
+        <p class="section__lead reveal">Déjanos tus datos y sé de los primeros en recibir la información del evento.</p>
+
+        <form id="signup-form" class="form reveal" novalidate autocomplete="on">
+          <!-- Honeypot anti-spam: debe permanecer vacío -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">No rellenar</label>
+            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" autocomplete="given-name" maxlength="60" required aria-describedby="err-nombre">
+              <p class="error" id="err-nombre" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="apellido">Apellido</label>
+              <input type="text" id="apellido" name="apellido" autocomplete="family-name" maxlength="60" required aria-describedby="err-apellido">
+              <p class="error" id="err-apellido" role="alert"></p>
+            </div>
+          </div>
+
+          <div class="row row--age">
+            <div class="field field--small">
+              <label for="edad">Edad</label>
+              <input type="text" id="edad" name="edad" inputmode="numeric" maxlength="3" required aria-describedby="err-edad">
+              <p class="error" id="err-edad" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="instagram">Instagram</label>
+              <input type="text" id="instagram" name="instagram" placeholder="@usuario o enlace" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="120" required aria-describedby="err-instagram">
+              <p class="error" id="err-instagram" role="alert"></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="whatsapp">WhatsApp</label>
+            <input type="tel" id="whatsapp" name="whatsapp" inputmode="tel" autocomplete="tel" placeholder="+57 300 000 0000" maxlength="24" required aria-describedby="err-whatsapp hint-whatsapp">
+            <p class="hint" id="hint-whatsapp">Incluye el prefijo internacional (ej. +57).</p>
+            <p class="error" id="err-whatsapp" role="alert"></p>
+          </div>
+
+          <div class="field field--check">
+            <input type="checkbox" id="consentimiento" name="consentimiento" required aria-describedby="err-consentimiento">
+            <label for="consentimiento">Acepto el tratamiento de mis datos personales según la <a href="privacidad.html" target="_blank" rel="noopener" id="privacy-link">política de privacidad</a>.</label>
+            <p class="error" id="err-consentimiento" role="alert"></p>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--block" id="submit-btn">
+            <span class="btn__label">ASEGURAR MI INSCRIPCIÓN</span>
+            <span class="btn__spinner" aria-hidden="true"></span>
+          </button>
+
+          <!-- Mensajes de estado (error de red, configuración pendiente...) -->
+          <p class="status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <!-- Confirmación -->
+        <div class="success" id="success" hidden tabindex="-1">
+          <div class="success__star" aria-hidden="true">✦</div>
+          <h3>¡Ya estás dentro!</h3>
+          <p>Recibimos tu inscripción. Te escribiremos por WhatsApp con las novedades del evento.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ CIERRE ============ -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer__brand">LAS ESTRELLAS <span class="shimmer">UNDERWATER</span></p>
+      <p class="footer__slogan">We create stars.</p>
+      <p class="footer__line">Cuando el cielo se refleja en el agua, la noche empieza a brillar.</p>
+      <div class="footer__agency">
+        <span>Una experiencia de</span>
+        <img src="assets/takeoff-logo.png" alt="TAKEOFF" width="800" height="234" loading="lazy" decoding="async">
+      </div>
+      <nav class="social" aria-label="Redes sociales">
+        <a href="#" id="link-instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="#" id="link-tiktok" target="_blank" rel="noopener noreferrer">TikTok</a>
+      </nav>
+      <p class="footer__legal">© <span id="year"></span> Las Estrellas Underwater · <a href="privacidad.html">Privacidad</a></p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/validators.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

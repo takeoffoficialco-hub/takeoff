@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Política de privacidad · Las Estrellas Underwater</title>
+  <meta name="description" content="Cómo tratamos los datos personales de quienes se inscriben a Las Estrellas Underwater.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#02060f">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!--
+    PLANTILLA EDITABLE: este texto es una base general. Adáptalo a tu caso
+    y, idealmente, haz que lo revise un abogado antes de publicar.
+    El correo de contacto se completa solo desde js/config.js (contactEmail).
+  -->
+  <main class="legal">
+    <div class="container">
+      <a class="back" href="index.html">← Volver</a>
+      <h1>Política de privacidad</h1>
+      <p>Última actualización: noviembre de 2026</p>
+
+      <h2>1. Responsable</h2>
+      <p>Las Estrellas Underwater es una experiencia producida por TAKEOFF, agencia independiente de eventos (en adelante, “nosotros”). Somos responsables del tratamiento de los datos que nos compartes al inscribirte.</p>
+
+      <h2>2. Qué datos recogemos</h2>
+      <ul>
+        <li>Nombre y apellido.</li>
+        <li>Edad.</li>
+        <li>Usuario de Instagram.</li>
+        <li>Número de WhatsApp.</li>
+        <li>La fecha y hora de tu inscripción.</li>
+      </ul>
+      <p>No recogemos datos de pago ni otros datos que no sean necesarios.</p>
+
+      <h2>3. Para qué los usamos</h2>
+      <ul>
+        <li>Gestionar tu inscripción y contactarte por WhatsApp con la información del evento.</li>
+        <li>Verificar la edad mínima de acceso.</li>
+        <li>Comunicarte novedades de Las Estrellas Underwater y de futuras experiencias de TAKEOFF, si así lo indicamos al contactarte.</li>
+      </ul>
+
+      <h2>4. Base legal</h2>
+      <p>Tratamos tus datos con tu consentimiento, que otorgas al marcar la casilla del formulario. Puedes retirarlo en cualquier momento.</p>
+
+      <h2>5. Dónde se guardan y con quién se comparten</h2>
+      <p>Tus datos se almacenan en una hoja de cálculo de Google Sheets gestionada por nosotros, a la que solo accede el equipo organizador. No vendemos tus datos. Solo los compartiremos con terceros cuando sea imprescindible para organizar el evento o si la ley lo exige.</p>
+
+      <h2>6. Cuánto tiempo los conservamos</h2>
+      <p>Mientras dure la organización del evento y el tiempo razonable posterior para comunicaciones relacionadas, o hasta que solicites su eliminación.</p>
+
+      <h2>7. Tus derechos</h2>
+      <p>Puedes solicitar acceso, corrección, actualización o eliminación de tus datos, y revocar tu consentimiento, escribiéndonos <span id="contact-line">a través de nuestras redes sociales</span>.</p>
+
+      <h2>8. Cambios</h2>
+      <p>Podemos actualizar esta política. La versión vigente siempre estará en esta página.</p>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script>
+    (function () {
+      var c = (window.SITE_CONFIG || {}).contactEmail;
+      var el = document.getElementById('contact-line');
+      if (c && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c) && el) {
+        el.textContent = '';
+        var a = document.createElement('a');
+        a.href = 'mailto:' + c; a.textContent = c;
+        el.appendChild(document.createTextNode('a '));
+        el.appendChild(a);
+      }
+    })();
+  </script>
+</body>
+</html>
