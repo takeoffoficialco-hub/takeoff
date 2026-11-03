@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Las Estrellas Underwater</title>
-  <meta name="description" content="Una experiencia musical privada alrededor de una piscina bajo las estrellas. Primer evento en diciembre. Inscríbete y asegura tu lugar.">
+  <meta name="description" content="Pool party privada en una mansión · 5 de diciembre. Artistas en vivo, cócteles, food truck y premios. Preventa $70.000. Inscríbete.">
   <meta name="theme-color" content="#02060f">
 
   <!-- Open Graph / Redes -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Las Estrellas Underwater · We create stars.">
-  <meta property="og:description" content="Una noche. Un universo. Una experiencia inolvidable. Inscríbete al primer evento de diciembre.">
+  <meta property="og:description" content="Una noche. Un universo. Pool party privada en una mansión el 5 de diciembre. Inscríbete.">
   <meta property="og:image" content="assets/og-image.png">
   <meta property="og:locale" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
@@ -43,15 +43,35 @@
     </div>
 
     <div class="hero__content">
-      <p class="eyebrow reveal">Pool party privada · Diciembre</p>
+      <p class="eyebrow reveal">Pool party privada · <span class="js-event-date">sábado 5 de diciembre</span></p>
       <h1 class="hero__title reveal">
         <span>LAS ESTRELLAS</span>
         <span class="shimmer">UNDERWATER</span>
       </h1>
       <p class="hero__slogan reveal">We create stars.</p>
       <p class="hero__impact reveal">Una noche. Un universo. Una experiencia inolvidable.</p>
-      <p class="hero__text reveal">Música en vivo, luces bajo el agua y un cielo lleno de estrellas. Una pool party exclusiva donde el sonido y la piscina se vuelven una sola cosa.</p>
+      <p class="hero__text reveal">Música en vivo, cócteles, food truck y premios en una mansión privada, con la piscina iluminada bajo un cielo de estrellas.</p>
+
       <a class="btn btn--primary reveal" href="#inscripcion" id="cta-hero">QUIERO INSCRIBIRME</a>
+
+      <ul class="chips reveal" aria-label="Datos del evento">
+        <li>Mansión privada</li>
+        <li>Artistas en vivo</li>
+        <li>Preventa <strong class="js-price">$70.000 COP</strong></li>
+      </ul>
+
+      <!-- Cuenta regresiva (la fecha se configura en js/config.js) -->
+      <div class="countdown reveal" id="countdown" role="timer" aria-label="Cuenta regresiva para el evento">
+        <p class="countdown__label">La noche empieza en</p>
+        <div class="countdown__grid">
+          <div><span id="cd-d">--</span><small>Días</small></div>
+          <div><span id="cd-h">--</span><small>Horas</small></div>
+          <div><span id="cd-m">--</span><small>Min</small></div>
+          <div><span id="cd-s">--</span><small>Seg</small></div>
+        </div>
+        <p class="countdown__done" id="cd-done" hidden>¡La noche llegó!</p>
+      </div>
+
     </div>
 
     <a class="scroll-hint" href="#experiencia" aria-label="Bajar a la experiencia"><span></span></a>
@@ -62,28 +82,38 @@
     <section class="section experience" id="experiencia">
       <div class="container">
         <h2 class="section__title reveal">La experiencia</h2>
-        <p class="section__lead reveal">Donde las estrellas, la música y el agua se encuentran.</p>
+        <p class="section__lead reveal">Donde las estrellas, la música y el agua se encuentran. Una comunidad que conecta a través de la música.</p>
 
         <ul class="cards">
           <li class="card reveal">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-            <h3>Música y artistas</h3>
-            <p>Sonidos en vivo y talento emergente en primera línea.</p>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/><path d="M8 10h.01M16 10h.01"/></svg>
+            <h3>Mansión privada</h3>
+            <p>Una noche exclusiva en un espacio privado, lejos de lo de siempre.</p>
           </li>
           <li class="card reveal">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c2.5-3 5-3 7.5 0s5 3 7.500 0 2.500-2 4.500-1M2 18c2.500-3 5-3 7.500 0s5 3 7.500 0 2.500-2 4.500-1M2 6c2.500-3 5-3 7.500 0s5 3 7.500 0 2.500-2 4.500-1"/></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c2.500-3 5-3 7.500 0s5 3 7.500 0c1-1.200 2-1.800 3-2"/><path d="M2 18c2.500-3 5-3 7.500 0s5 3 7.500 0c1-1.200 2-1.800 3-2"/><path d="M2 6c2.500-3 5-3 7.500 0s5 3 7.500 0c1-1.200 2-1.800 3-2"/></svg>
             <h3>Pool party nocturna</h3>
             <p>Luces subacuáticas y reflejos bajo el cielo abierto.</p>
           </li>
           <li class="card reveal">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.900 6.300 6.900.8-5.100 4.700 1.400 6.800L12 17l-6.100 3.600 1.400-6.800L2.200 9.100l6.900-.8z"/></svg>
-            <h3>Experiencia exclusiva</h3>
-            <p>Un evento privado, pensado al detalle y con acceso limitado.</p>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <h3>Artistas en vivo</h3>
+            <p>Música y talento emergente en primera línea.</p>
           </li>
           <li class="card reveal">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.500"/><path d="M3 20c0-3.300 2.700-6 6-6s6 2.700 6 6M15 20c0-2.200 1.600-4 4-4 1.100 0 2 .4 2 .4"/></svg>
-            <h3>Una comunidad</h3>
-            <p>Personas que se conectan a través de la música.</p>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14l-7 8z"/><path d="M12 12v8"/><path d="M8 20h8"/><path d="M16 7l3-4"/></svg>
+            <h3>Cócteles</h3>
+            <p>Barra de cócteles para brindar bajo las estrellas.</p>
+          </li>
+          <li class="card reveal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 7h11v10H2z"/><path d="M13 10h4l3 3v4h-7"/><circle cx="6.500" cy="18" r="1.800"/><circle cx="16.500" cy="18" r="1.800"/></svg>
+            <h3>Food truck</h3>
+            <p>Comida para recargar energía entre canción y canción.</p>
+          </li>
+          <li class="card reveal">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4"/><path d="M16 6h3a3 3 0 0 1-3 4"/><path d="M12 13v4"/><path d="M9 20h6"/></svg>
+            <h3>Premios</h3>
+            <p>Sorpresas y premios para quienes viven la noche.</p>
           </li>
         </ul>
       </div>
@@ -93,7 +123,13 @@
     <section class="section signup" id="inscripcion">
       <div class="container container--narrow">
         <h2 class="section__title reveal">Inscríbete</h2>
-        <p class="section__lead reveal">Déjanos tus datos y sé de los primeros en recibir la información del evento.</p>
+        <p class="section__lead reveal">Completa tus datos y confírmalos por WhatsApp para asegurar tu lugar en la preventa.</p>
+
+        <div class="ticket reveal">
+          <p class="ticket__tag">Boleta en preventa</p>
+          <p class="ticket__price js-price">$70.000 COP</p>
+          <p class="ticket__date"><span class="js-event-date">sábado 5 de diciembre</span> · Mansión privada</p>
+        </div>
 
         <form id="signup-form" class="form reveal" novalidate autocomplete="on">
           <!-- Honeypot anti-spam: debe permanecer vacío -->
@@ -145,16 +181,21 @@
             <span class="btn__label">ASEGURAR MI INSCRIPCIÓN</span>
             <span class="btn__spinner" aria-hidden="true"></span>
           </button>
+          <p class="form__note">Al continuar te llevaremos a WhatsApp para confirmar tu inscripción.</p>
 
           <!-- Mensajes de estado (error de red, configuración pendiente...) -->
           <p class="status" id="form-status" role="status" aria-live="polite"></p>
         </form>
 
-        <!-- Confirmación -->
+        <!-- Paso final / confirmación -->
         <div class="success" id="success" hidden tabindex="-1">
           <div class="success__star" aria-hidden="true">✦</div>
-          <h3>¡Ya estás dentro!</h3>
-          <p>Recibimos tu inscripción. Te escribiremos por WhatsApp con las novedades del evento.</p>
+          <h3 id="success-title">¡Ya estás dentro!</h3>
+          <p id="success-text"></p>
+          <a class="btn btn--primary" id="wa-btn" href="#" target="_blank" rel="noopener noreferrer" hidden>
+            <span class="btn__label">CONFIRMAR POR WHATSAPP</span>
+          </a>
+          <p class="success__note" id="success-note"></p>
         </div>
       </div>
     </section>
@@ -166,6 +207,7 @@
       <p class="footer__brand">LAS ESTRELLAS <span class="shimmer">UNDERWATER</span></p>
       <p class="footer__slogan">We create stars.</p>
       <p class="footer__line">Cuando el cielo se refleja en el agua, la noche empieza a brillar.</p>
+      <p class="footer__date"><span class="js-event-date">sábado 5 de diciembre</span> · Mansión privada</p>
       <div class="footer__agency">
         <span>Una experiencia de</span>
         <img src="assets/takeoff-logo.png" alt="TAKEOFF" width="800" height="234" loading="lazy" decoding="async">

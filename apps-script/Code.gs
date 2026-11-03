@@ -12,6 +12,7 @@ var HEADERS = ['Fecha', 'Nombre', 'Apellido', 'Edad', 'Instagram', 'WhatsApp', '
 var WHATSAPP_COL = 6;   // columna F
 var MIN_AGE = 18;       // mantener igual que minAge en js/config.js
 var MAX_AGE = 99;
+var NOTIFY_OWNER = true; // true = te llega un correo (al dueño del script) por cada inscripción nueva
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -47,6 +48,7 @@ function doPost(e) {
       safe_(v.data.id)
     ]]);
 
+    notifyOwner_(v.data);
     return json_({ ok: true });
   } catch (err) {
     console.error(err);
@@ -105,6 +107,25 @@ function exists_(sheet, whatsapp) {
   var values = sheet.getRange(2, WHATSAPP_COL, last - 1, 1).getValues();
   for (var i = 0; i < values.length; i++) { if (String(values[i][0]) === whatsapp) return true; }
   return false;
+}
+
+/** Aviso por correo al dueño del script. Si falla, la inscripción ya quedó guardada. */
+function notifyOwner_(d) {
+  if (!NOTIFY_OWNER) return;
+  try {
+    var to = Session.getEffectiveUser().getEmail();
+    if (!to) return;
+    MailApp.sendEmail(
+      to,
+      'Nueva inscripción · Las Estrellas Underwater',
+      'Nombre: ' + d.nombre + ' ' + d.apellido + '\n' +
+      'Edad: ' + d.edad + '\n' +
+      'Instagram: ' + d.instagram + '\n' +
+      'WhatsApp: ' + d.whatsapp
+    );
+  } catch (err) {
+    console.error('No se pudo enviar el aviso por correo', err);
+  }
 }
 
 function json_(obj) {

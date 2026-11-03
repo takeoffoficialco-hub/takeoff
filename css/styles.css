@@ -185,7 +185,7 @@ a { color: inherit; }
   color: var(--turq); text-shadow: 0 0 24px rgba(31, 230, 214, .6);
 }
 .hero__impact { margin: 1.1rem auto 0; max-width: 34rem; font-size: clamp(1.05rem, 2.6vw, 1.35rem); font-weight: 400; color: #fff; }
-.hero__text { margin: 1rem auto 2rem; max-width: 36rem; color: var(--muted); }
+.hero__text { margin: 1rem auto 1.6rem; max-width: 36rem; color: var(--muted); }
 
 .scroll-hint {
   position: absolute; left: 50%; bottom: 1.1rem; z-index: 4; transform: translateX(-50%);
@@ -215,7 +215,7 @@ a { color: inherit; }
 .experience { background: linear-gradient(180deg, var(--black), #03102b 60%, #04163a); }
 .cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.2rem; grid-template-columns: 1fr; }
 @media (min-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1000px) { .cards { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1000px) { .cards { grid-template-columns: repeat(3, 1fr); } }
 .card {
   padding: 1.8rem 1.5rem; border-radius: 20px; backdrop-filter: blur(8px);
   background: linear-gradient(160deg, rgba(42, 123, 255, .16), rgba(255, 255, 255, .03));
@@ -316,6 +316,46 @@ a { color: inherit; }
 }
 .social a:hover { border-color: var(--turq); color: var(--turq); box-shadow: 0 0 24px rgba(31, 230, 214, .3); transform: translateY(-2px); }
 .footer__legal { margin: 2.4rem 0 0; font-size: .8rem; color: var(--muted); }
+.footer__date { margin: 1.2rem 0 0; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; font-size: .85rem; color: #fff; }
+
+/* =========================================================
+   DATOS DEL EVENTO: chips, cuenta regresiva, boleta
+   ========================================================= */
+.chips { list-style: none; margin: 2rem 0 1.5rem; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.chips li {
+  padding: .4rem .95rem; border-radius: 999px; font-size: .85rem; font-weight: 500; color: #fff;
+  background: rgba(31, 230, 214, .1); border: 1px solid rgba(31, 230, 214, .45);
+}
+.chips strong { color: var(--turq); font-weight: 600; }
+
+.countdown { margin: 0 auto; max-width: 27rem; }
+.countdown__label { margin: 0; font-size: .75rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--turq); }
+.countdown__grid { margin-top: .7rem; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .6rem; }
+.countdown__grid > div {
+  padding: .7rem .2rem .55rem; border-radius: 14px; backdrop-filter: blur(6px);
+  background: linear-gradient(160deg, rgba(42, 123, 255, .22), rgba(255, 255, 255, .04));
+  border: 1px solid rgba(160, 200, 255, .28);
+}
+.countdown__grid span {
+  display: block; font-family: var(--font-display); font-weight: 800; line-height: 1; color: #fff;
+  font-size: clamp(1.5rem, 6.5vw, 2.3rem); font-variant-numeric: tabular-nums; text-shadow: 0 0 20px rgba(120, 190, 255, .55);
+}
+.countdown__grid small { display: block; margin-top: .35rem; font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.countdown__done { margin: .6rem 0 0; font-family: var(--font-display); font-weight: 800; font-size: 1.8rem; color: var(--turq); text-shadow: 0 0 24px rgba(31, 230, 214, .6); }
+
+.ticket {
+  max-width: 26rem; margin: 0 auto 2rem; padding: 1.3rem 1.5rem; text-align: center; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(42, 123, 255, .3), rgba(31, 230, 214, .16));
+  border: 1px dashed rgba(255, 255, 255, .45); box-shadow: 0 0 50px rgba(42, 123, 255, .2);
+}
+.ticket__tag { margin: 0; font-size: .75rem; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--turq); }
+.ticket__price { margin: .3rem 0; font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 8vw, 2.8rem); line-height: 1.1; color: #fff; text-shadow: 0 0 26px rgba(120, 190, 255, .5); }
+.ticket__date { margin: 0; color: var(--silver); }
+
+.form__note { margin: .9rem 0 0; font-size: .82rem; text-align: center; color: var(--muted); }
+.success .btn { margin-top: 1.4rem; }
+.success__note { margin: 1rem auto 0; max-width: 22rem; font-size: .85rem; color: var(--muted); }
+.success__note:empty { display: none; }
 
 /* =========================================================
    PÁGINA LEGAL (privacidad.html)

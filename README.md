@@ -1,7 +1,6 @@
 # Las Estrellas Underwater · Web de inscripción
 
 Sitio estático (HTML + CSS + JavaScript, sin dependencias ni build) para la pool party nocturna de **TAKEOFF**.
-Las inscripciones se guardan en una hoja de Google Sheets mediante Google Apps Script.
 
 ```
 las-estrellas-underwater/
@@ -9,47 +8,65 @@ las-estrellas-underwater/
 ├── privacidad.html       Política de privacidad (plantilla editable)
 ├── vercel.json           Configuración de Vercel
 ├── css/styles.css        Estilos y paleta de colores
-├── js/config.js          ⭐ Configuración: endpoint, redes, edad mínima
+├── js/config.js          ⭐ Configuración: fecha, precio, WhatsApp, redes, Sheets
 ├── js/validators.js      Validación de campos
-├── js/main.js            Estrellas, animaciones y envío del formulario
+├── js/main.js            Estrellas, cuenta regresiva y formulario
 ├── assets/               Logo TAKEOFF, favicon e imagen para redes (og-image.png)
-└── apps-script/Code.gs   Código del endpoint para Google Sheets
+└── apps-script/Code.gs   Código opcional para guardar inscripciones en Google Sheets
 ```
+
+## Cómo llegan las inscripciones
+
+1. La persona llena el formulario (todo se valida en la página).
+2. Al pulsar **ASEGURAR MI INSCRIPCIÓN**, aparece el último paso con un botón que abre **WhatsApp con sus datos ya escritos**, dirigido al número configurado en `js/config.js` (`whatsappNumber`).
+3. La inscripción queda completa cuando la persona **pulsa enviar** en WhatsApp. Una página web no puede enviar mensajes a un WhatsApp por sí sola (haría falta la API de WhatsApp Business, de pago), por eso se usa este paso final.
+4. Opcional y recomendado: conecta Google Sheets (sección 3). Así cada inscripción se guarda **automáticamente** en una hoja, aunque la persona no llegue a enviar el WhatsApp, y te avisa por correo.
+
+El número configurado es `573052308859` (57 = Colombia). Si no es de Colombia, cambia el prefijo en `js/config.js`.
 
 ## 1. Descomprimir el proyecto
 
-Descomprime `las-estrellas-underwater.zip` (clic derecho → *Extraer todo* en Windows, doble clic en Mac).
-Obtendrás la carpeta `las-estrellas-underwater`.
+Descomprime `las-estrellas-underwater.zip` (doble clic en Mac; clic derecho → *Extraer todo* en Windows). Obtendrás la carpeta `las-estrellas-underwater`.
 
-## 2. Configurar el formulario (Google Sheets + Apps Script)
+## 2. Configurar fecha, precio y WhatsApp (`js/config.js`)
 
-1. Crea una hoja nueva en [sheets.new](https://sheets.new) y ponle un nombre, por ejemplo *Inscripciones Las Estrellas*.
+| Ajuste | Qué hace |
+|---|---|
+| `eventDate` | Fecha y hora del evento para la cuenta regresiva. Ahora está a las 00:00 del 5 de diciembre de 2026; cámbiala a la hora real de inicio, por ejemplo `'2026-12-05T20:00:00-05:00'`. El texto "sábado 5 de diciembre" se genera solo desde esta fecha. |
+| `ticketPrice` | Precio de preventa que se muestra (`'$70.000 COP'`). |
+| `whatsappNumber` | Número que recibe las inscripciones, con prefijo de país y solo dígitos. |
+| `instagramUrl`, `tiktokUrl` | Enlaces del cierre. Si dejas uno vacío, ese botón no se muestra. |
+| `minAge` | Edad mínima del formulario (18 por defecto). |
+
+Cuando termine la cuenta regresiva, el contador muestra "¡La noche llegó!".
+
+## 3. (Opcional) Guardar en Google Sheets con Apps Script
+
+1. Crea una hoja nueva en [sheets.new](https://sheets.new).
 2. En la hoja: **Extensiones → Apps Script**.
-3. Borra el contenido del editor, abre `apps-script/Code.gs` de este proyecto, copia todo y pégalo. Guarda (💾).
+3. Borra el contenido del editor, abre `apps-script/Code.gs`, copia todo y pégalo. Guarda (💾).
 4. Pulsa **Implementar → Nueva implementación**.
    - Tipo (⚙️): **Aplicación web**.
    - *Ejecutar como*: **Yo**.
    - *Quién tiene acceso*: **Cualquier persona**.
-   - Pulsa **Implementar** y **autoriza** los permisos cuando Google lo pida (aparece una advertencia de “app no verificada”: *Avanzado → Ir a proyecto*; es tu propio script).
-5. Copia la **URL de la aplicación web** (termina en `/exec`).
-6. Abre `js/config.js` y pégala:
+   - Pulsa **Implementar** y **autoriza** los permisos (Google avisa “app no verificada”: *Avanzado → Ir a proyecto*; es tu propio script). Los permisos incluyen enviar correos: es para avisarte de cada inscripción. Si no quieres ese aviso, pon `NOTIFY_OWNER = false` en `Code.gs`.
+5. Copia la **URL de la aplicación web** (termina en `/exec`) y pégala en `js/config.js`:
 
    ```js
    endpoint: 'https://script.google.com/macros/s/XXXXXXXX/exec',
    ```
 
-7. Comprueba que el endpoint está vivo: abre la URL en el navegador; debe mostrar `{"ok":true,"service":"Las Estrellas Underwater","status":"activo"}`.
+6. Comprueba que está vivo: abre esa URL en el navegador; debe mostrar `{"ok":true,"service":"Las Estrellas Underwater","status":"activo"}`.
 
-Notas importantes:
+Notas:
 - La pestaña **Inscripciones** se crea sola con la primera inscripción.
 - El script rechaza WhatsApp duplicados y vuelve a validar todo en el servidor.
-- Si modificas `Code.gs` más adelante, debes publicar una **nueva versión**: *Implementar → Administrar implementaciones → ✏️ → Versión: Nueva versión → Implementar*. La URL no cambia.
+- Si modificas `Code.gs`, publica una **nueva versión**: *Implementar → Administrar implementaciones → ✏️ → Versión: Nueva versión → Implementar*. La URL no cambia.
 - La URL del endpoint es pública por diseño; no da acceso a tu hoja, solo permite añadir inscripciones válidas. No pongas contraseñas en `config.js`.
-- Si `endpoint` está vacío, el formulario muestra “Configuración pendiente” y **no** simula que guardó nada.
+- Si cambias la edad mínima, hazlo en `minAge` (config.js) y en `MIN_AGE` (Code.gs).
+- Si el guardado en Sheets falla, la persona igualmente ve el paso de WhatsApp, y la web no dice que quedó guardada.
 
-Si cambias la edad mínima, hazlo en dos sitios: `minAge` en `js/config.js` y `MIN_AGE` en `Code.gs`.
-
-## 3. Probarlo localmente
+## 4. Probarlo localmente
 
 Desde una terminal, dentro de la carpeta del proyecto:
 
@@ -58,49 +75,42 @@ python3 -m http.server 8080
 # o bien: npx serve .
 ```
 
-Abre <http://localhost:8080>. Prueba:
-- Enviar el formulario vacío → errores bajo cada campo.
-- Edad menor al mínimo, Instagram con caracteres raros, WhatsApp sin `+` → mensajes claros.
-- Con el endpoint configurado, una inscripción válida → confirmación y una fila nueva en la hoja.
+Abre <http://localhost:8080>. Prueba el contador, el formulario vacío (errores bajo cada campo), edad menor a 18, WhatsApp sin `+`, y una inscripción válida: debe aparecer el botón de WhatsApp con tus datos escritos.
 
-> Abrir `index.html` con doble clic también muestra la página, pero el envío del formulario debe probarse desde un servidor (local o Vercel).
+## 5. Subirlo a Vercel
 
-## 4. Subirlo a Vercel
-
-**Opción A · Con GitHub (recomendada)**
-1. Sube la carpeta a un repositorio nuevo de GitHub.
+**Con GitHub (recomendada)**
+1. Sube el contenido de la carpeta a un repositorio (con `index.html` en la raíz).
 2. En [vercel.com/new](https://vercel.com/new) importa el repositorio.
-3. *Framework Preset*: **Other**. Deja *Build Command* y *Output Directory* vacíos. Pulsa **Deploy**.
+3. *Framework Preset*: **Other**. Deja *Build Command* y *Output Directory* vacíos. **Deploy**.
 
-**Opción B · Con la terminal**
+**Con la terminal**
 ```bash
 npm i -g vercel
 cd las-estrellas-underwater
-vercel          # primera vez: sigue las preguntas
-vercel --prod   # publicar en producción
+vercel          # primera vez
+vercel --prod   # producción
 ```
 
-Después de publicar:
-1. En `index.html`, dentro de `<head>`, cambia `og:image` por la URL absoluta (`https://tu-dominio.com/assets/og-image.png`) y añade `<meta property="og:url" content="https://tu-dominio.com">`.
-2. Opcional: añade tu dominio propio en *Project → Settings → Domains*.
+Después de publicar, en `index.html` cambia `og:image` por la URL absoluta (`https://tu-dominio.com/assets/og-image.png`) y añade `<meta property="og:url" content="https://tu-dominio.com">`.
 
-## 5. Personalizar
+Para actualizar la web: edita el archivo en GitHub y pulsa *Commit changes*; Vercel republica solo.
+
+## 6. Personalizar
 
 | Qué | Dónde |
 |---|---|
-| Textos de la página | `index.html` (busca los títulos y párrafos de cada sección) |
-| Instagram, TikTok y correo de contacto | `js/config.js` (si dejas una red vacía, su botón no se muestra) |
+| Textos, tarjetas de la experiencia (mansión, artistas, cócteles, food truck, premios) | `index.html` |
+| Fecha, precio, WhatsApp y redes | `js/config.js` |
 | Colores | Variables al inicio de `css/styles.css` (`--electric`, `--turq`, `--black`…) |
-| Logo TAKEOFF | Reemplaza `assets/takeoff-logo.png` (PNG blanco con fondo transparente) |
-| Imagen al compartir en redes | Reemplaza `assets/og-image.png` (1200 × 630 px) |
-| Favicon | `assets/favicon.svg` |
-| Política de privacidad | `privacidad.html` (es una plantilla general: haz que la revise un abogado) |
-| Mes del evento (“Diciembre”) | Etiqueta superior del hero en `index.html` |
+| Logo TAKEOFF | `assets/takeoff-logo.png` (PNG blanco con fondo transparente) |
+| Imagen al compartir en redes | `assets/og-image.png` (1200 × 630 px) |
+| Política de privacidad | `privacidad.html` (plantilla general: que la revise un abogado) |
 
-El proyecto no incluye fecha, lugar, artistas ni precios porque aún no están definidos. Cuando los tengas, añade una sección en `index.html` con el mismo estilo de `.card`.
+Pendiente de definir cuando lo tengas: lugar/ciudad, nombres de artistas, detalle de los premios y fin de la preventa. Añádelos en `index.html` con el estilo de las tarjetas `.card`.
 
 ## Accesibilidad y rendimiento
 
-- Contraste alto, etiquetas en todos los campos, errores anunciados a lectores de pantalla y foco visible.
-- Respeta `prefers-reduced-motion`: se desactivan animaciones y el cielo se queda estático.
-- Animaciones con CSS y un único `<canvas>` que se pausa cuando no se ve. Sin librerías ni imágenes pesadas (solo el logo y las fuentes de Google Fonts).
+- Contraste alto, etiquetas en todos los campos, errores anunciados a lectores de pantalla, foco visible y contador accesible.
+- Respeta `prefers-reduced-motion`: se desactivan animaciones y el cielo queda estático.
+- Animaciones con CSS y un único `<canvas>` que se pausa cuando no se ve. Sin librerías.

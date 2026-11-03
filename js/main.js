@@ -3,8 +3,8 @@
    1) Utilidades y configuración
    2) Cielo estrellado (canvas)
    3) Animaciones de entrada y resplandor del puntero
-   4) Redes sociales
-   5) Formulario de inscripción
+   4) Datos del evento, cuenta regresiva y redes sociales
+   5) Formulario de inscripción (Sheets opcional + WhatsApp)
    ========================================================= */
 (function () {
   'use strict';
@@ -98,7 +98,7 @@
   /* ---------- 3) Entrada al hacer scroll + resplandor del puntero ---------- */
   (function reveals() {
     var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
-    items.forEach(function (el, i) {
+    items.forEach(function (el) {
       var parentIndex = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
       el.style.setProperty('--d', (Math.min(parentIndex, 6) * 0.09).toFixed(2) + 's');
     });
@@ -130,7 +130,52 @@
     });
   })();
 
-  /* ---------- 4) Redes sociales (se ocultan si no hay URL configurada) ---------- */
+  /* ---------- 4) Datos del evento, cuenta regresiva y redes ---------- */
+  var eventTime = new Date(cfg.eventDate || '').getTime(); // NaN si no hay fecha válida
+
+  (function eventInfo() {
+    // Fecha legible (ej. "sábado 5 de diciembre") a partir de eventDate
+    if (!isNaN(eventTime)) {
+      try {
+        var txt = new Intl.DateTimeFormat('es-CO', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'America/Bogota' })
+          .format(new Date(eventTime)).replace(',', '');
+        Array.prototype.forEach.call(document.querySelectorAll('.js-event-date'), function (el) { el.textContent = txt; });
+      } catch (e) { /* se queda el texto por defecto del HTML */ }
+    }
+    // Precio de preventa
+    if (cfg.ticketPrice) {
+      Array.prototype.forEach.call(document.querySelectorAll('.js-price'), function (el) { el.textContent = cfg.ticketPrice; });
+    }
+  })();
+
+  (function countdown() {
+    var box = document.getElementById('countdown');
+    if (!box) return;
+    if (isNaN(eventTime)) { box.hidden = true; return; }
+    var grid = box.querySelector('.countdown__grid');
+    var label = box.querySelector('.countdown__label');
+    var done = document.getElementById('cd-done');
+    var els = { d: document.getElementById('cd-d'), h: document.getElementById('cd-h'), m: document.getElementById('cd-m'), s: document.getElementById('cd-s') };
+    var timer;
+
+    function pad(n) { return n < 10 ? '0' + n : String(n); }
+    function tick() {
+      var diff = eventTime - Date.now();
+      if (diff <= 0) {
+        clearInterval(timer);
+        grid.hidden = true; label.hidden = true; done.hidden = false;
+        return;
+      }
+      var total = Math.floor(diff / 1000);
+      els.d.textContent = pad(Math.floor(total / 86400));
+      els.h.textContent = pad(Math.floor((total % 86400) / 3600));
+      els.m.textContent = pad(Math.floor((total % 3600) / 60));
+      els.s.textContent = pad(total % 60);
+    }
+    tick();
+    timer = setInterval(tick, 1000);
+  })();
+
   (function social() {
     var map = { 'link-instagram': cfg.instagramUrl, 'link-tiktok': cfg.tiktokUrl };
     var visible = 0;
@@ -152,11 +197,17 @@
     var btn = document.getElementById('submit-btn');
     var statusEl = document.getElementById('form-status');
     var successEl = document.getElementById('success');
+    var waBtn = document.getElementById('wa-btn');
     var submitting = false;
     var STORE_KEY = 'eu_registered_v1';
 
     var minAge = Number(cfg.minAge) || 18;
     var maxAge = Number(cfg.maxAge) || 99;
+    var waNumber = String(cfg.whatsappNumber || '').replace(/\D/g, '');
+    var hasWA = /^\d{8,15}$/.test(waNumber);
+    var ENDPOINT_RE = /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/;
+    var endpoint = String(cfg.endpoint || '').trim();
+    var hasEndpoint = ENDPOINT_RE.test(endpoint);
 
     // Cada regla devuelve {ok, value|error}
     var rules = {
@@ -174,15 +225,13 @@
     function wrapper(input) { return input.closest('.field'); }
     function setFieldError(name, msg) {
       var input = form.elements[name];
-      var box = wrapper(input);
-      box.classList.add('is-invalid');
+      wrapper(input).classList.add('is-invalid');
       input.setAttribute('aria-invalid', 'true');
       document.getElementById('err-' + name).textContent = msg;
     }
     function clearFieldError(name) {
       var input = form.elements[name];
-      var box = wrapper(input);
-      box.classList.remove('is-invalid');
+      wrapper(input).classList.remove('is-invalid');
       input.removeAttribute('aria-invalid');
       document.getElementById('err-' + name).textContent = '';
     }
@@ -228,15 +277,50 @@
       return 'id-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
     }
 
-    function showSuccess(message) {
-      if (message) successEl.querySelector('p').textContent = message;
+    // Mensaje prellenado que se enviará al WhatsApp del evento
+    function whatsappUrl(d) {
+      var msg = 'Hola, quiero inscribirme a Las Estrellas Underwater ✨\n' +
+        'Nombre: ' + d.nombre + ' ' + d.apellido + '\n' +
+        'Edad: ' + d.edad + '\n' +
+        'Instagram: ' + d.instagram + '\n' +
+        'WhatsApp: ' + d.whatsapp;
+      return 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent(msg);
+    }
+
+    /**
+     * Pantalla final. mode:
+     *  - 'saved'   → guardado en Google Sheets
+     *  - 'dup'     → ya estaba registrado en Google Sheets
+     *  - 'waonly'  → no hay Sheets (o falló): la inscripción se completa al enviar el WhatsApp
+     *  - 'again'   → ya se había inscrito desde este dispositivo
+     */
+    function showStep(mode, data) {
+      var title = document.getElementById('success-title');
+      var text = document.getElementById('success-text');
+      var note = document.getElementById('success-note');
+      note.textContent = '';
+
+      if (mode === 'saved' || mode === 'dup') {
+        title.textContent = mode === 'dup' ? '¡Ya estabas en la lista!' : '¡Ya estás dentro!';
+        text.textContent = hasWA
+          ? 'Registramos tu inscripción. Toca el botón para confirmarla por WhatsApp con el equipo.'
+          : 'Registramos tu inscripción. Te escribiremos por WhatsApp con las novedades del evento.';
+      } else if (mode === 'again') {
+        title.textContent = 'Ya te inscribiste desde este dispositivo';
+        text.textContent = 'Si aún no enviaste el mensaje por WhatsApp, puedes hacerlo con el botón.';
+      } else {
+        title.textContent = 'Último paso';
+        text.textContent = 'Toca el botón y envía el mensaje por WhatsApp. Tu inscripción queda completa cuando lo recibamos.';
+        note.textContent = 'Se abrirá WhatsApp con tus datos ya escritos; solo tienes que pulsar enviar.';
+      }
+
+      if (hasWA) { waBtn.href = whatsappUrl(data); waBtn.hidden = false; } else { waBtn.hidden = true; }
+
       form.hidden = true;
       successEl.hidden = false;
       successEl.focus();
       successEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
     }
-
-    var ENDPOINT_RE = /^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/;
 
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
@@ -254,17 +338,16 @@
       // Honeypot: un humano nunca rellena este campo.
       if (form.elements.website.value) return;
 
-      var endpoint = String(cfg.endpoint || '').trim();
-      if (!ENDPOINT_RE.test(endpoint)) {
+      if (!hasWA && !hasEndpoint) {
         setStatus('warn', 'Configuración pendiente: las inscripciones aún no están conectadas y tu información NO se ha guardado. Inténtalo más tarde.');
-        if (window.console) console.warn('[Las Estrellas Underwater] Falta configurar SITE_CONFIG.endpoint en js/config.js (ver README).');
+        if (window.console) console.warn('[Las Estrellas Underwater] Configura whatsappNumber o endpoint en js/config.js (ver README).');
         return;
       }
 
-      if (alreadyRegistered(data.whatsapp)) {
-        setStatus('info', 'Este número ya quedó inscrito desde este dispositivo. ¡Estás en la lista!');
-        return;
-      }
+      if (alreadyRegistered(data.whatsapp)) { showStep('again', data); return; }
+
+      // Sin Google Sheets: la inscripción llega por WhatsApp.
+      if (!hasEndpoint) { remember(data.whatsapp); showStep('waonly', data); return; }
 
       var payload = {
         id: uuid(),
@@ -291,15 +374,14 @@
       })
         .then(function (res) { return res.json(); })
         .then(function (json) {
-          if (json && json.ok) { remember(data.whatsapp); showSuccess(); }
-          else if (json && json.error === 'duplicate') {
-            remember(data.whatsapp);
-            showSuccess('Este número ya estaba inscrito. ¡Estás en la lista! Te escribiremos por WhatsApp.');
-          } else { throw new Error((json && json.error) || 'respuesta inválida'); }
+          if (json && json.ok) { remember(data.whatsapp); showStep('saved', data); }
+          else if (json && json.error === 'duplicate') { remember(data.whatsapp); showStep('dup', data); }
+          else { throw new Error((json && json.error) || 'respuesta inválida'); }
         })
         .catch(function (err) {
-          if (window.console) console.error('[Las Estrellas Underwater] Error al enviar:', err);
-          setStatus('error', 'No pudimos confirmar tu inscripción. Revisa tu conexión e inténtalo de nuevo.');
+          if (window.console) console.error('[Las Estrellas Underwater] Error al guardar en Sheets:', err);
+          if (hasWA) { showStep('waonly', data); } // no se guardó, pero el WhatsApp sí puede completar la inscripción
+          else { setStatus('error', 'No pudimos confirmar tu inscripción. Revisa tu conexión e inténtalo de nuevo.'); }
         })
         .then(function () { clearTimeout(timer); submitting = false; setLoading(false); });
     });
